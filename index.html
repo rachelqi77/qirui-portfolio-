@@ -1,4 +1,10 @@
 html
+
+复制
+
+下载
+
+运行
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -10,7 +16,7 @@ html
     <meta name="keywords" content="祁蕊,影视创作,导演,剪辑,作品集,微电影,综艺,武汉大学">
     <meta name="author" content="祁蕊">
     <style>
-        /* 完整CSS代码在这里（与之前相同） */
+        /* 所有CSS样式已内嵌在此处 */
         * {
             margin: 0;
             padding: 0;
@@ -27,6 +33,8 @@ html
             --border-color: #444;
             --card-bg: #222;
             --hover-bg: #2a2a2a;
+            --error-color: #ff6b6b;
+            --loading-color: #4da6ff;
         }
 
         body {
@@ -448,6 +456,108 @@ html
             background-color: #ff5252;
         }
 
+        /* 新增样式：视频加载状态和错误处理 */
+        .video-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .video-loading i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .video-error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 80%;
+            z-index: 10;
+        }
+
+        .video-error i {
+            font-size: 3rem;
+            color: var(--error-color);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .video-error p {
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .retry-btn {
+            background-color: var(--loading-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .retry-btn:hover {
+            background-color: #2a8fff;
+        }
+
+        .alternative-btn {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--accent-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 10px;
+            transition: all 0.3s;
+        }
+
+        .alternative-btn:hover {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+        }
+
+        /* 图片加载优化 */
+        .project-image img {
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s;
+        }
+        
+        .project-image img.loaded {
+            opacity: 1;
+        }
+        
+        .project-image .placeholder {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #222, #333);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
         footer {
             text-align: center;
             padding: 30px 0;
@@ -575,7 +685,11 @@ html
             <!-- 作品1 - 微电影《噢！乖》 -->
             <div class="project-card" data-video-id="oh-guai">
                 <div class="project-image">
-                    <img id="cover-oh-guai" src="https://img.zcool.cn/community/694e18fc92e73yykwydl3x6076.jpg?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp" alt="《噢！乖》封面">
+                    <img id="cover-oh-guai" 
+                         src="https://img.zcool.cn/community/694e18fc92e73yykwydl3x6076.jpg?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp" 
+                         alt="《噢！乖》封面"
+                         loading="lazy">
+                    <div class="placeholder">《噢！乖》封面加载中...</div>
                     <div class="play-overlay">
                         <div class="play-button">
                             <i class="fas fa-play"></i>
@@ -598,7 +712,11 @@ html
             <!-- 作品2 - 微电影《想见到你》 -->
             <div class="project-card" data-video-id="want-to-see-you">
                 <div class="project-image">
-                    <img id="cover-want-to-see-you" src="https://img.zcool.cn/community/694e19f73256dml9vuk3pm4704.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp" alt="《想见到你》封面">
+                    <img id="cover-want-to-see-you" 
+                         src="https://img.zcool.cn/community/694e19f73256dml9vuk3pm4704.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp" 
+                         alt="《想见到你》封面"
+                         loading="lazy">
+                    <div class="placeholder">《想见到你》封面加载中...</div>
                     <div class="play-overlay">
                         <div class="play-button">
                             <i class="fas fa-play"></i>
@@ -621,7 +739,11 @@ html
             <!-- 作品3 - 混剪作品《浮光》 -->
             <div class="project-card" data-video-id="fuguang">
                 <div class="project-image">
-                    <img id="cover-fuguang" src="https://img.zcool.cn/community/694e1b4f7b9963plrj3veu6118.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp" alt="《浮光》封面">
+                    <img id="cover-fuguang" 
+                         src="https://img.zcool.cn/community/694e1b4f7b9963plrj3veu6118.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp" 
+                         alt="《浮光》封面"
+                         loading="lazy">
+                    <div class="placeholder">《浮光》封面加载中...</div>
                     <div class="play-overlay">
                         <div class="play-button">
                             <i class="fas fa-play"></i>
@@ -644,7 +766,11 @@ html
             <!-- 作品4 - 自制综艺《桂子山进化论》预告 -->
             <div class="project-card" data-video-id="guizishan-evolution">
                 <div class="project-image">
-                    <img id="cover-guizishan-evolution" src="https://img.zcool.cn/community/694e1de2deeebov0uuzulf8538.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp" alt="《桂子山进化论》封面">
+                    <img id="cover-guizishan-evolution" 
+                         src="https://img.zcool.cn/community/694e1de2deeebov0uuzulf8538.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp" 
+                         alt="《桂子山进化论》封面"
+                         loading="lazy">
+                    <div class="placeholder">《桂子山进化论》封面加载中...</div>
                     <div class="play-overlay">
                         <div class="play-button">
                             <i class="fas fa-play"></i>
@@ -667,7 +793,11 @@ html
             <!-- 作品5 - 自制综艺《跳进武汉的旅行》预告 -->
             <div class="project-card" data-video-id="jump-wuhan-trailer">
                 <div class="project-image">
-                    <img id="cover-jump-wuhan-trailer" src="https://img.zcool.cn/community/694e1e85eb942txqkciwh52755.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp" alt="《跳进武汉的旅行》封面">
+                    <img id="cover-jump-wuhan-trailer" 
+                         src="https://img.zcool.cn/community/694e1e85eb942txqkciwh52755.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp" 
+                         alt="《跳进武汉的旅行》封面"
+                         loading="lazy">
+                    <div class="placeholder">《跳进武汉的旅行》封面加载中...</div>
                     <div class="play-overlay">
                         <div class="play-button">
                             <i class="fas fa-play"></i>
@@ -690,7 +820,11 @@ html
             <!-- 作品6 - 混剪作品《开端》 -->
             <div class="project-card" data-video-id="kaiduan">
                 <div class="project-image">
-                    <img id="cover-kaiduan" src="https://img.zcool.cn/community/694e1bb19bcc87ev3yzc1t6722.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp" alt="《开端》封面">
+                    <img id="cover-kaiduan" 
+                         src="https://img.zcool.cn/community/694e1bb19bcc87ev3yzc1t6722.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp" 
+                         alt="《开端》封面"
+                         loading="lazy">
+                    <div class="placeholder">《开端》封面加载中...</div>
                     <div class="play-overlay">
                         <div class="play-button">
                             <i class="fas fa-play"></i>
@@ -723,8 +857,24 @@ html
             </div>
             <div class="video-container">
                 <div class="video-wrapper">
+                    <!-- 视频加载状态 -->
+                    <div class="video-loading" id="videoLoading" style="display: none;">
+                        <i class="fas fa-spinner"></i>
+                        <p>视频加载中...</p>
+                    </div>
+                    
+                    <!-- 视频错误提示 -->
+                    <div class="video-error" id="videoError" style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p id="errorMessage">视频加载失败，请检查网络连接</p>
+                        <button class="retry-btn" id="retryBtn">重新加载</button>
+                        <a href="#" target="_blank" id="alternativeLink" class="alternative-btn" style="display: none;">
+                            前往站酷观看
+                        </a>
+                    </div>
+                    
                     <!-- 视频播放器 -->
-                    <video id="videoPlayer" class="video-player" controls poster="">
+                    <video id="videoPlayer" class="video-player" controls>
                         您的浏览器不支持 video 标签。
                     </video>
                 </div>
@@ -755,22 +905,22 @@ html
     </footer>
 
     <script>
+        // 所有JavaScript功能已内嵌在此处
         document.addEventListener('DOMContentLoaded', function() {
+            // 项目卡片悬停效果
             const projectCards = document.querySelectorAll('.project-card');
             const skillCards = document.querySelectorAll('.skill-category');
-            const videoModal = document.getElementById('videoModal');
-            const closeModalBtn = document.getElementById('closeModal');
-            const videoPlayer = document.getElementById('videoPlayer');
-            const externalLink = document.getElementById('externalLink');
             
-            // 悬停效果
             projectCards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-5px)';
                 });
+                
                 card.addEventListener('mouseleave', function() {
                     this.style.transform = 'translateY(0)';
                 });
+                
+                // 点击打开视频模态框
                 card.addEventListener('click', function() {
                     const videoId = this.getAttribute('data-video-id');
                     openVideoModal(videoId);
@@ -781,39 +931,72 @@ html
                 card.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-5px)';
                 });
+                
                 card.addEventListener('mouseleave', function() {
                     this.style.transform = 'translateY(0)';
                 });
             });
             
+            // 视频模态框功能
+            const videoModal = document.getElementById('videoModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const videoPlayer = document.getElementById('videoPlayer');
+            const externalLink = document.getElementById('externalLink');
+            const videoLoading = document.getElementById('videoLoading');
+            const videoError = document.getElementById('videoError');
+            const errorMessage = document.getElementById('errorMessage');
+            const retryBtn = document.getElementById('retryBtn');
+            const alternativeLink = document.getElementById('alternativeLink');
+            
+            let currentVideoData = null;
+            let currentVideoId = null;
+            
             // 关闭模态框
             closeModalBtn.addEventListener('click', function() {
-                videoModal.style.display = 'none';
-                videoPlayer.pause();
+                closeVideoModal();
             });
             
+            // 点击模态框背景关闭
             videoModal.addEventListener('click', function(e) {
                 if (e.target === videoModal) {
-                    videoModal.style.display = 'none';
-                    videoPlayer.pause();
+                    closeVideoModal();
                 }
             });
             
+            // 键盘ESC键关闭模态框
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && videoModal.style.display === 'flex') {
-                    videoModal.style.display = 'none';
-                    videoPlayer.pause();
+                    closeVideoModal();
                 }
             });
             
-            // 视频数据
+            // 重试按钮
+            retryBtn.addEventListener('click', function() {
+                if (currentVideoId) {
+                    loadVideo(currentVideoId);
+                }
+            });
+            
+            function closeVideoModal() {
+                videoModal.style.display = 'none';
+                videoPlayer.pause();
+                videoPlayer.src = '';
+                videoLoading.style.display = 'none';
+                videoError.style.display = 'none';
+                currentVideoData = null;
+            }
+            
+            // 视频数据 - 使用您提供的站酷视频链接
             const videoData = {
                 'oh-guai': {
                     title: '微电影《噢！乖》',
                     description: '一部关于家庭冲突和个人成长的叙事短片。使用冷色调来表达主角的内心世界，通过细腻的镜头语言展现主角在家庭矛盾中的挣扎与成长。',
                     info: '2023年 | 微电影 / 叙事短片 | 获奖作品',
-                    awards: ['马栏山青年创作大赛微电影单元最佳作品', 'NCDA省级二等奖'],
-                    videoUrl: 'https://video.zcool.cn/alivod/694e18a1340d52zzt9u7l11786_H264_1_4a02c6a5b16c.mp4?k=3e4457d570d2a9f0dd450be057e21fe2&t=694e2f6c',
+                    awards: [
+                        '马栏山青年创作大赛微电影单元最佳作品',
+                        'NCDA省级二等奖'
+                    ],
+                    videoUrl: 'https://video.zcool.cn/alivod/694e18a1340d52zzt9u7l11786_H264_1_4a02c6a5b16c.mp4?k=565bdb68c52ff235045a247849255c1d&t=694e5054',
                     coverUrl: 'https://img.zcool.cn/community/694e18fc92e73yykwydl3x6076.jpg?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp',
                     externalUrl: 'https://www.zcool.com.cn/work/ZNzI5NzIxODQ=.html',
                     hasVideo: true,
@@ -824,9 +1007,9 @@ html
                     description: '一部青春剧情微电影，主要向观众展示武汉这座城市的美丽风景。通过青春的视角探索城市与人之间的情感连接。',
                     info: '2022年 | 青春微电影 / 城市题材',
                     awards: [],
-                    videoUrl: 'https://video.zcool.cn/alivod/694e19a59189ejpn16e1et8371_H264_1_4a3759e89247.mp4?k=fa737346b9a1cec3523897ed5cf41ca5&t=694e30fb',
+                    videoUrl: 'https://video.zcool.cn/alivod/694e19a59189ejpn16e1et8371_H264_1_4a3759e89247.mp4?k=130a9cc85573c5494b8a93e18de781a8&t=694e506a',
                     coverUrl: 'https://img.zcool.cn/community/694e19f73256dml9vuk3pm4704.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp',
-                    externalUrl: '#',
+                    externalUrl: 'https://www.zcool.com.cn/',
                     hasVideo: true,
                     hasAwards: false
                 },
@@ -835,9 +1018,9 @@ html
                     description: '探索综艺美学的视听表达，通过精准剪辑实现节奏与音乐的完美融合。展现综艺节目的视觉节奏感和情绪感染力。',
                     info: '2023年 | 混剪作品 / 节奏剪辑',
                     awards: [],
-                    videoUrl: 'https://video.zcool.cn/alivod/694e1b5b9a8e2sf0yas1ws2604_H264_1_ce0ddd5e407c9.mp4?k=de3d7b7f75c9207f19a26e34d9671351&t=694e3ad5',
+                    videoUrl: 'https://video.zcool.cn/alivod/694e1b5b9a8e2sf0yas1ws2604_H264_1_ce0ddd5e407c9.mp4?k=4c27924f2db9048cf21eae7e51fe8835&t=694e5085',
                     coverUrl: 'https://img.zcool.cn/community/694e1b4f7b9963plrj3veu6118.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp',
-                    externalUrl: '#',
+                    externalUrl: 'https://www.zcool.com.cn/',
                     hasVideo: true,
                     hasAwards: false
                 },
@@ -846,9 +1029,9 @@ html
                     description: '桂进工作室出品自制综艺《桂子山进化论》预告剪辑，大学生创业项目成果展示。展现大学生团队的创意与执行力。',
                     info: '2024年 | 综艺预告 / 大学生创业项目',
                     awards: [],
-                    videoUrl: 'https://video.zcool.cn/alivod/694e1ded90ba4m35atnq2n9692_H264_1_4b34d0967b95.mp4?k=8ca10a888938998f71ea996bc936f4e9&t=694e3b01',
+                    videoUrl: 'https://video.zcool.cn/alivod/694e1ded90ba4m35atnq2n9692_H264_1_4b34d0967b95.mp4?k=2b36e068b5e10f8063089abbfdebb343&t=694e5096',
                     coverUrl: 'https://img.zcool.cn/community/694e1de2deeebov0uuzulf8538.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp',
-                    externalUrl: '#',
+                    externalUrl: 'https://www.zcool.com.cn/',
                     hasVideo: true,
                     hasAwards: false
                 },
@@ -857,9 +1040,9 @@ html
                     description: '桂进工作室出品旅行综艺《跳进武汉的旅行》预告片，展现武汉城市魅力与青春活力。大创项目的实践成果展示。',
                     info: '2024年 | 旅行综艺预告 / 大创项目',
                     awards: [],
-                    videoUrl: 'https://video.zcool.cn/alivod/694e1ea9ddfb2d6w0zo34w385_H264_1_270f7ddcee225.mp4?k=fae50ab078df1803aa2e374425a55421&t=694e3196',
+                    videoUrl: 'https://video.zcool.cn/alivod/694e1ea9ddfb2d6w0zo34w385_H264_1_270f7ddcee225.mp4?k=8a39a6a9c3926fdf6be2013321fdabff&t=694e50a6',
                     coverUrl: 'https://img.zcool.cn/community/694e1e85eb942txqkciwh52755.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp',
-                    externalUrl: '#',
+                    externalUrl: 'https://www.zcool.com.cn/',
                     hasVideo: true,
                     hasAwards: false
                 },
@@ -868,53 +1051,158 @@ html
                     description: '用最爱的音乐编织跌宕情节，在一次次循环中坚守善良与纯真。通过音乐与画面的结合，探索人性中的美好品质。',
                     info: '2023年 | 混剪作品 / 音乐剪辑',
                     awards: [],
-                    videoUrl: 'https://video.zcool.cn/alivod/694e1bc34e160uiibz6k7r5741_H264_1_2704d1a2d0946.mp4?k=9abedf645e2edd2375346e04abd21dfe&t=694e31e1',
+                    videoUrl: 'https://video.zcool.cn/alivod/694e1bc34e160uiibz6k7r5741_H264_1_2704d1a2d0946.mp4?k=09482aac1cb1049b69c93a820f32ec65&t=694e50bb',
                     coverUrl: 'https://img.zcool.cn/community/694e1bb19bcc87ev3yzc1t6722.png?x-oss-process=image/saveexif,1/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/quality,q_100/format,webp',
-                    externalUrl: '#',
+                    externalUrl: 'https://www.zcool.com.cn/',
                     hasVideo: true,
                     hasAwards: false
                 }
             };
             
-            function openVideoModal(videoId) {
+            // 图片加载优化
+            function optimizeImageLoading() {
+                const images = document.querySelectorAll('.project-image img');
+                images.forEach(img => {
+                    // 创建占位符
+                    const placeholder = img.nextElementSibling;
+                    
+                    // 检查图片是否已加载
+                    if (img.complete) {
+                        img.classList.add('loaded');
+                        if (placeholder) placeholder.style.display = 'none';
+                    } else {
+                        img.onload = function() {
+                            this.classList.add('loaded');
+                            if (placeholder) placeholder.style.display = 'none';
+                        };
+                        
+                        img.onerror = function() {
+                            console.log('图片加载失败:', this.src);
+                            if (placeholder) {
+                                placeholder.textContent = '封面加载失败';
+                            }
+                        };
+                    }
+                });
+            }
+            
+            // 视频事件监听器
+            videoPlayer.addEventListener('waiting', function() {
+                showLoading();
+            });
+            
+            videoPlayer.addEventListener('canplay', function() {
+                hideLoading();
+            });
+            
+            videoPlayer.addEventListener('playing', function() {
+                hideLoading();
+            });
+            
+            videoPlayer.addEventListener('error', function(e) {
+                console.error('视频加载错误:', e);
+                showError('视频加载失败，请检查网络连接或稍后重试');
+            });
+            
+            // 显示加载状态
+            function showLoading() {
+                videoLoading.style.display = 'block';
+                videoError.style.display = 'none';
+            }
+            
+            // 隐藏加载状态
+            function hideLoading() {
+                videoLoading.style.display = 'none';
+                videoError.style.display = 'none';
+            }
+            
+            // 显示错误
+            function showError(message) {
+                errorMessage.textContent = message;
+                videoLoading.style.display = 'none';
+                videoError.style.display = 'block';
+                
+                // 如果有外部链接，显示替代观看按钮
+                if (currentVideoData && currentVideoData.externalUrl && currentVideoData.externalUrl !== '#') {
+                    alternativeLink.href = currentVideoData.externalUrl;
+                    alternativeLink.style.display = 'inline-block';
+                } else {
+                    alternativeLink.style.display = 'none';
+                }
+            }
+            
+            // 加载视频
+            function loadVideo(videoId) {
+                currentVideoId = videoId;
                 const video = videoData[videoId];
                 if (!video) return;
                 
+                currentVideoData = video;
+                
+                // 更新模态框内容
                 document.getElementById('modalTitle').textContent = video.title;
                 document.getElementById('videoDescription').textContent = video.description;
                 document.getElementById('videoInfo').textContent = video.info;
                 
-                if (video.hasVideo && video.videoUrl) {
-                    videoPlayer.style.display = 'block';
-                    videoPlayer.src = video.videoUrl;
-                    videoPlayer.poster = video.coverUrl || '';
-                    videoPlayer.load();
-                    
-                    videoPlayer.onerror = function() {
-                        alert(`抱歉，${video.title} 视频暂时无法播放，请稍后再试。`);
-                    };
-                } else {
-                    videoPlayer.style.display = 'none';
-                }
-                
+                // 设置外部链接
                 if (video.externalUrl && video.externalUrl !== '#') {
-                    externalLink.style.display = 'inline-flex';
                     externalLink.href = video.externalUrl;
-                    externalLink.textContent = '查看站酷详情';
+                    externalLink.style.display = 'inline-flex';
                 } else {
                     externalLink.style.display = 'none';
                 }
                 
-                videoModal.style.display = 'flex';
+                // 重置状态
+                hideLoading();
+                videoError.style.display = 'none';
+                alternativeLink.style.display = 'none';
                 
+                // 加载视频
                 if (video.hasVideo && video.videoUrl) {
-                    setTimeout(() => {
+                    showLoading();
+                    videoPlayer.src = video.videoUrl;
+                    videoPlayer.load();
+                    
+                    // 设置封面
+                    if (video.coverUrl) {
+                        videoPlayer.poster = video.coverUrl;
+                    }
+                    
+                    // 设置超时检测
+                    const timeout = setTimeout(() => {
+                        if (videoPlayer.networkState === videoPlayer.NETWORK_NO_SOURCE ||
+                            videoPlayer.readyState < videoPlayer.HAVE_METADATA) {
+                            showError('视频加载超时，请稍后重试');
+                        }
+                    }, 15000); // 站酷视频可能需要更长时间加载
+                    
+                    videoPlayer.oncanplay = function() {
+                        clearTimeout(timeout);
+                        hideLoading();
+                        
+                        // 尝试自动播放
                         videoPlayer.play().catch(e => {
-                            console.log('自动播放被阻止');
+                            console.log('自动播放被阻止，等待用户交互');
                         });
-                    }, 300);
+                    };
+                    
+                    // 添加CORS相关设置
+                    videoPlayer.setAttribute('crossorigin', 'anonymous');
+                } else {
+                    showError('该作品暂无可用视频');
                 }
+                
+                // 显示模态框
+                videoModal.style.display = 'flex';
             }
+            
+            // 打开视频模态框
+            function openVideoModal(videoId) {
+                loadVideo(videoId);
+            }
+            
+            // 初始化图片加载优化
+            optimizeImageLoading();
         });
     </script>
 </body>
